@@ -7,7 +7,7 @@ import "../ERC20 /Ownable.sol";
 import "../ERC20 /Math.sol";
 
 contract LiquidityPool is Ownable {
-    /************************************************************************
+    /*************************************************************************************
     *@notice Eimt when a user add liquidity to the pool
     *@param _account address of the liquidity provider
     */
@@ -26,7 +26,7 @@ contract LiquidityPool is Ownable {
     event TokenTrade(address indexed _account, uint256 _tradeEther, uint256 _tradeSpCoin);
     
      //instance of LPToken contract 
-    Lptoken public lptoken;
+    LpToken public lpToken;
      //instance of spaceCoin Token contract
     SpaceCoin public spaceCoin;
     //Ether Reserve of the liquidity pool
@@ -46,9 +46,9 @@ contract LiquidityPool is Ownable {
      * only owner able to call and set the address of  LPToken contract
      * address should be set only once after deploying contract
      */
-    function setLPTokenAddress(Lptoken _lptoken) external onlyOwner{
-        require(address(lptoken)== address(0),"set only once");
-        lptoken = _lptoken;
+    function setLPTokenAddress(LpToken _lpToken) external onlyOwner{
+        require(address(lpToken)== address(0),"set only once");
+        lpToken = _lpToken;
     }
      /****************************************************************************************
      *@notice to get the ETH and SpaceCoin Reserve of Liquidity Pool
@@ -116,7 +116,7 @@ contract LiquidityPool is Ownable {
      */
     function depositfunds(uint256 _spcAmount, address _account) external payable {
         uint256 liquidity;
-        uint256 totalSupply = lptoken.balanceOf(_account);
+        uint256 totalSupply = lpToken.balanceOf(_account);
         uint256 EthAmount = msg.value;
         
         if(totalSupply > 0){
@@ -124,7 +124,7 @@ contract LiquidityPool is Ownable {
         }else{
             liquidity = Math.sqrt(EthAmount * _spcAmount);
         }
-        lptoken.mint(_account, liquidity);
+        lpToken.mint(_account, liquidity);
         emit Addliquidity(_account);
         _update();
 
@@ -139,15 +139,15 @@ contract LiquidityPool is Ownable {
      *
      */
     function withdrawfunds(address _account) external  {
-        uint liquidity = lptoken.balanceOf(_account);
+        uint liquidity = lpToken.balanceOf(_account);
         require(liquidity != 0, "NO tokens Available");
 
-        uint256 totalSupply = lptoken.totalSupply();
+        uint256 totalSupply = lpToken.totalSupply();
 
         uint EthAmount = (etherReserve * liquidity)/ totalSupply;
         uint spcAmount = (SpCoinReserve * liquidity)/ totalSupply;
 
-        lptoken.burn(_account, liquidity);
+        lpToken.burn(_account, liquidity);
         (bool ethTransferSuccess,)= _account.call{value :EthAmount}("");
         bool SpaceCoinTransferSuccess = spaceCoin.transfer(_account, spcAmount);
 

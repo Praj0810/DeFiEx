@@ -8,7 +8,7 @@ contract SpaceCoin is ERC20{
     address public tokenOwner;
 
     //owner address of DeFiRouter contract
-    address public DefiRouter;
+    address public DeFiRouter;
 
     /** 
     *@dev provide the name and the symbol of the token
@@ -25,8 +25,8 @@ contract SpaceCoin is ERC20{
     } 
 
     //to check whether msg.sender is DefiRouter or not.
-    modifier onlyDefiRouter(){
-        require(msg.sender == DefiRouter, "Not Defi Router");
+    modifier onlyDeFiRouter(){
+        require(msg.sender == DeFiRouter, "Not Defi Router");
         _;
     }
     
@@ -35,14 +35,14 @@ contract SpaceCoin is ERC20{
     * 
     * @dev developer needs to pass the address DefiRouter.
     *
-    * @param _DefiRouter address of the  DefiRouter
+    * @param _DeFiRouter address of the  DefiRouter
     *
     * only owner of this contract will be able top call and set the address of the router
     * address is set only once after Deploying the contract
     **/
-    function setRouter(address _DefiRouter) external onlyOwner{
-        require(DefiRouter == address(0) , "written only once");
-        DefiRouter = _DefiRouter;
+    function setRouter(address _DeFiRouter) external onlyOwner{
+        require(DeFiRouter == address(0) , "written only once");
+        DeFiRouter = _DeFiRouter;
     }
 
     /***
@@ -56,7 +56,7 @@ contract SpaceCoin is ERC20{
     * only DefiRouter contract will be able to call
     * @return bool for Allowance success 
     **/
-    function increaseDRoutAllowance(address _tokenOwner, address _spender, uint256 _amount) public onlyDefiRouter returns(bool){
+    function increaseDRoutAllowance(address _tokenOwner, address _spender, uint256 _amount) public onlyDeFiRouter returns(bool){
         _approve(_tokenOwner, _spender, allowance(msg.sender, address(this))+ _amount);
         return true;
     }
