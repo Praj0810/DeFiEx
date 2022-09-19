@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Praj0810/DeFiEx/issues"
   },
-  "homepage": "https://github.com/Praj0810/DeFiEx#readme"
+  "homepage": "https://github.com/Praj0810/DeFiEx#readme",
+  "dependencies": {
+    "web3": "^1.8.0"
+  }
 }
